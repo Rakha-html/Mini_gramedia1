@@ -36,17 +36,17 @@
                     <div class="mb-3">
                         <label for="color_text" class="form-label mb-2">Warna</label>
                         <div class="d-flex align-items-center gap-2">
-                            <input type="text" 
+                            <input type="color"
                                 class="form-control @error('color') is-invalid @enderror"
-                                id="color_text" 
-                                name="color" 
-                                value="{{ old('color') }}" 
+                                id="color_text"
+                                name="color"
+                                value="{{ old('color') }}"
                                 placeholder="masukan warna"
                                 required>
-                                
-                                <input type="color" 
+
+                                <input type="color"
                                     class="form-control form-control-color @error('color') is-invalid @enderror"
-                                    id="color_picker" 
+                                    id="color_picker"
                                     value="{{ old('color', '#000000') }}">
                             </div>
                             @error('color')

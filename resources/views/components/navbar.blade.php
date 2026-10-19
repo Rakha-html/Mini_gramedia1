@@ -68,7 +68,7 @@
         <form action="{{ route('search') }}" method="GET" class="input-icon w-100 py-2">
                 <input type="text" value="{{ request('search') }}" name="search" class="form-control form-control-rounded"
                     placeholder="Cari Judul, Produk, Buku, Penulis..." />
-                    <button type="submit" class="input-icon-addon">
+                    <button type="submit" class="input-icon-addon" hidden>
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="icon"

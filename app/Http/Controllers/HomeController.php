@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $subscriptionPackages = SubscriptionPackage::all();
+        $subscriptionPackages = SubscriptionPackage::latest()->take(3)->get();
         $latestBooks = Book::orderBy('created_at', 'desc')->limit(10)->get();
         $freeBooks = Book::where('price', 0)->orderBy('created_at', 'desc')->limit(10)->get();
         return view('home', compact('subscriptionPackages', 'latestBooks', 'freeBooks'));
