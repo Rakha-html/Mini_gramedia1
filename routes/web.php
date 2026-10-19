@@ -8,6 +8,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/category/{id}', [HomeController::class, 'category'])->name('category.show');
+Route::get('/kategori/{id}', [HomeController::class, 'category']);
 
 Route::middleware(['IsLoggedIn'])->group(function(){
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');

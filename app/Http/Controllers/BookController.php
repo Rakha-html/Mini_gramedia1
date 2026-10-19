@@ -46,7 +46,7 @@ class BookController extends Controller
                             data-language="'. e($row->language) .'"
                             data-page-of-book="'. e($row->page_of_book) .'"
                             data-release-date="'. e(date('d M Y', strtotime($row->release_date))) .'"
-                            data-description="'. e(strip_tags($row->description)) .'"
+                            data-description="'. e($row->description) .'"
                             >Detail
                             </button>';
                     return $btnEdit . $btnDelete . $btnDetail;
@@ -111,7 +111,10 @@ class BookController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.books.edit');
+        $book = Book::findOrFail($id);
+        $bookCategories = BookCategory::all();
+
+        return view('admin.books.edit', compact('book', 'bookCategories'));
     }
 
     /**
@@ -119,26 +122,54 @@ class BookController extends Controller
      */
     public function update(Request $request, string $id)
     {
-       $book = Book::findOrFail($id);
+        $book = Book::findOrFail($id);
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'writer' => ['required', 'string', 'max:255'],
+            'publisher' => ['required', 'string', 'max:255'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'language' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'color' => ['required', 'string'],
-            'price' => ['required', 'integer', 'min:0'],
+            'release_date' => ['required', 'date'],
+            'page_of_book' => ['required', 'integer', 'min:1'],
+            'book_category_id' => ['required', 'exists:book_categories,id'],
+            'cover' => ['nullable', 'mimes:jpg,jpeg,png,webp,svg'],
         ]);
-        $validated['description'] = filled(trim($validated['description'] ?? ''))
-            ? trim($validated['description'])
-            : 'PAKET LENGKAP';
+
+        $validated['description'] = $validated['description'] ?? '';
+
+        if ($request->hasFile('cover')) {
+            $oldCoverPath = str_replace('/storage/', '', $book->cover);
+            $cover = $request->file('cover');
+            $fileName = $cover->hashName();
+            Storage::disk('public')->putFileAs('covers', $cover, $fileName);
+            $validated['cover'] = Storage::url('covers/' . $fileName);
+        } else {
+            unset($validated['cover']);
+        }
+
         $book->update($validated);
+
+        if ($request->hasFile('cover') && Storage::disk('public')->exists($oldCoverPath)) {
+            Storage::disk('public')->delete($oldCoverPath);
+        }
+
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-         $book = Book::findOrFail($id);
+    public function destroy(Book $book)
+    {   
+        if($book->cover){
+            $oldImagePath = str_replace('/storage/','',$book->cover);
+
+            if(Storage::disk('public')->exists($oldImagePath)){
+                Storage::disk('public')->delete($oldImagePath);
+            }
+        }
+
         $book->delete();
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil dihapus');
     }

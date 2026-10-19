@@ -49,40 +49,26 @@
 
                 <div class="dropdown-menu dropdown-menu-card" style="min-width: 600px">
                     <div class="row g-2 p-3">
-                        <div class="col-3">
-                            <div class="card py-2">
-                                <div class="card-body p-2 text-center">Kategori 1</div>
+                        @forelse (($categories ?? []) as $category)
+                            <div class="col-3">
+                                <a href="{{ route('category.show', $category->id) }}" class="text-decoration-none">
+                                    <div class="card py-2 h-100 border text-reset">
+                                        <div class="card-body p-2 text-center text-dark fw-medium">{{ $category->name }}</div>
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-
-                        <div class="col-3">
-                            <div class="card py-2">
-                                <div class="card-body p-2 text-center">Kategori 2</div>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
-                            <div class="card py-2">
-                                <div class="card-body p-2 text-center">Kategori 3</div>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
-                            <div class="card py-2">
-                                <div class="card-body p-2 text-center">Kategori 4</div>
-                            </div>
-                        </div>
-
+                        @empty
+                            <div class="col-12 text-center text-muted">Tidak ada kategori</div>
+                        @endforelse
                     </div>
                 </div>
             </div>
 
         {{-- SEARCH BAR --}}
-        <div class="input-icon w-100 py-2">
-                <input type="text" class="form-control form-control-rounded"
+        <form action="{{ route('search') }}" method="GET" class="input-icon w-100 py-2">
+                <input type="text" value="{{ request('search') }}" name="search" class="form-control form-control-rounded"
                     placeholder="Cari Judul, Produk, Buku, Penulis..." />
-
-                    <span class="input-icon-addon">
+                    <button type="submit" class="input-icon-addon">
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="icon"
@@ -98,9 +84,9 @@
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <circle cx="10" cy="10" r="7" />
                             <line x1="21" y1="21" x2="15" y2="15" />
-                        </svg>
-                    </span>
-        </div>
+                    </svg>
+                    </button>
+        </form>
 
         {{---icon keranjang---}}
         <div class="mt-3 ms-2">

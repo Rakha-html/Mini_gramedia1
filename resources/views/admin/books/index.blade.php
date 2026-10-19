@@ -60,7 +60,7 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <p class="mb-2">deskripsi</p>
-                        <div id="data-description" class="border rounded p-3" style="height: 220px; overflow-y: auto; white-space: pre-line;"></div>
+                        <div id="data-description" class="border rounded p-3" style="height: 220px; overflow-y: auto; white-space: pre-line; background-color: #f5f5f5;"></div>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                 $("#data-language").text(btn.data('language'));
                 $("#data-page_of_book").text(btn.data('pageOfBook'));
                 $("#data-release_date").text(btn.data('releaseDate'));
-                $("#data-description").text(btn.data('description'));
+                $("#data-description").html(btn.data('description'));
 
                 let cover = btn.data('cover');
                 $("#data-cover").attr('src', cover);
