@@ -4,6 +4,7 @@ use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\SubscriptionPackageController;
+use App\Http\Controllers\SubscriptionPackageBookController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,11 @@ Route::middleware(['IsLoggedIn'])->group(function(){
         })->name('dashboard');
 
         Route::resource('book-categories', BookCategoryController::class);
+        Route::get('paket-langganan/books/{id}', [SubscriptionPackageBookController::class, 'show'])->name('paket-langganan.books');
+        Route::post('paket-langganans/books/{id}', [SubscriptionPackageBookController::class, 'store'])->name('paket-langganan.books.store');
         Route::resource('paket-langganan', SubscriptionPackageController::class);
         Route::resource('books', BookController::class);
+
     });
 });
 

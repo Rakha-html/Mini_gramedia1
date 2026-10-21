@@ -38,18 +38,15 @@ class SubscriptionPackageController extends Controller
                 ->addColumn('action', function ($data) {
                     $csrf = csrf_field();
                     $method = method_field('DELETE');
+                    $editUrl = route('admin.paket-langganan.edit', $data->id);
+                    $deleteUrl = route('admin.paket-langganan.destroy', $data->id);
+                    $books = route('admin.paket-langganan.books', $data->id);
 
-                    return '<a href="' . route('admin.paket-langganan.edit', $data->id) . '"
-                            class="btn btn-warning btn-sm">Edit</a>
-                            <form action="' . route('admin.paket-langganan.destroy', $data->id) . '"
-                                 method="POST" class="d-inline">
-                                ' . $csrf . '
-                                ' . $method . '
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm(\'Apakah Anda yakin ingin menghapus paket ini?\')">
-                                    Hapus
-                                </button>
-                            </form>';
+                    $btnBooks = '<a href="' . $books . '" class="btn btn-sm btn-info">Buku</a>';
+
+
+
+                    return $btnBooks;
                 })
 
                 ->rawColumns(['color', 'action'])
